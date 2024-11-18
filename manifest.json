@@ -3,6 +3,9 @@
     "name": "PwdVault",
     "description": "Password manager extension",
     "version": "1.0",
+    "content_security_policy": {
+    "extension_pages": "script-src 'self'; object-src 'self'"
+    },
     "action": {
       "default_popup": "popup/popup.html"
     },
@@ -16,7 +19,7 @@
     {
       "js": ["scripts/content.js"],
       "matches": [
-        "https://learn.microsoft.com/en-us/dotnet/csharp/*"
+        "<all_urls>"
       ]
     }
   ]
