@@ -4,7 +4,20 @@
     "description": "Password manager extension",
     "version": "1.0",
     "action": {
-      "default_popup": "popup/popup.html",
-      "default_icon": "images/logo.png"
+      "default_popup": "popup/popup.html"
+    },
+    "icons": {
+        "16": "images/logo-16.png",
+        "32": "images/logo-32.png",
+        "48": "images/logo-48.png",
+        "128": "images/logo-128.png"
+    },
+    "content_scripts": [
+    {
+      "js": ["scripts/content.js"],
+      "matches": [
+        "https://learn.microsoft.com/en-us/dotnet/csharp/*"
+      ]
     }
-  }
+  ]
+}
