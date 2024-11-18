@@ -1,0 +1,10 @@
+{
+    "manifest_version": 3,
+    "name": "PwdVault",
+    "description": "Password manager extension",
+    "version": "1.0",
+    "action": {
+      "default_popup": "popup/popup.html",
+      "default_icon": "images/logo.png"
+    }
+  }
