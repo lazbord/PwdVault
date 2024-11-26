@@ -3,6 +3,7 @@
     "name": "PwdVault",
     "description": "Password manager extension",
     "version": "1.0",
+    "permissions": ["tabs"],
     "content_security_policy": {
     "extension_pages": "script-src 'self'; object-src 'self'"
     },
