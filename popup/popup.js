@@ -1,43 +1,59 @@
-console.log("This is a popup!");
-
-let stockageUrl = []; // Variable locale pour stocker les URLs
-
 document.addEventListener("DOMContentLoaded", () => {
-    // Charger les URLs depuis localStorage au démarrage
-    const storedUrls = JSON.parse(localStorage.getItem("stockageUrl")) || [];
-    stockageUrl = storedUrls; // Met à jour la variable locale
-
-    // Associer les boutons à leurs actions
-    const button1 = document.getElementById("get-url-button");
-    const button2 = document.getElementById("reveal-button");
+    const button1 = document.getElementById("store-url-button");
+    const button2 = document.getElementById("test-url-button");
 
     button1.addEventListener("click", () => {
-        getUrl();
+        storeUrl();
     });
 
     button2.addEventListener("click", () => {
-        reveal();
+        window.indexedDB.databases().then((r) => {
+            for (var i = 0; i < r.length; i++) window.indexedDB.deleteDatabase(r[i].name);
+        }).then(() => {
+            alert('All data cleared.');
+        });
     });
 });
 
-function getUrl() {
-    const urlElement = document.getElementById("URL");
+function storeUrl() {
+    const request = indexedDB.open("db", 2);
 
-    (async () => {
-        const [tab] = await chrome.tabs.query({ active: true, lastFocusedWindow: true });
+    request.onerror = (event) => {
+        console.log("Error opening the database", event.target.error);
+    };
 
-        if (tab && tab.url) {
-            urlElement.innerHTML = "URL ajouté !";
-            let myurl = new URL(tab.url)
-            stockageUrl.push(myurl.hostname); // Ajoute l'URL à la liste locale
-            localStorage.setItem("stockageUrl", JSON.stringify(stockageUrl)); // Sauvegarde la liste mise à jour dans localStorage
+    request.onupgradeneeded = (event) => {
+        let db = event.target.result; // Use event.target.result instead of request.result here
+        if (!db.objectStoreNames.contains('sites')) {
+            db.createObjectStore('sites', { keyPath: 'hostname' });
+            console.log("Object store 'sites' created.");
         }
-    })();
+    };
+
+    request.onsuccess = (event) => {
+        let db = event.target.result;
+
+        let transaction = db.transaction("sites", "readwrite");
+        let sites = transaction.objectStore("sites");
+
+        let site = {
+            hostname: 'test',
+            email: 'email',
+            password: 'password'
+        };
+
+        let addRequest = sites.add(site);
+
+        addRequest.onsuccess = function () {
+            console.log("Site added to the database : ", addRequest.result);
+        };
+
+        addRequest.onerror = function () {
+            console.log("Error adding site", addRequest.error);
+        };
+    };
 }
 
-function reveal() {
-    const stockageElement = document.getElementById("stockage");
+function showUrl() {
 
-    // Afficher les URLs stockées
-    stockageElement.innerHTML = stockageUrl.join("<br>"); // Séparé par des sauts de ligne
 }
