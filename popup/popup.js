@@ -24,7 +24,11 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     });
 
+
 });
+
+
+
 
 function storeUrl() {
     const request = indexedDB.open("db", 2);
@@ -106,51 +110,82 @@ function showUrl() {
 }
 
 
-function testUrl() {
-    const request = indexedDB.open("db", 2);
+async function testUrl(hostname) {
+    return new Promise((resolve, reject) => {
+        const request = indexedDB.open("db", 2);
 
-    request.onerror = (event) => {
-        console.log("Error opening the database", event.target.error);
-    };
+        request.onerror = (event) => {
+            console.log("Error opening the database", event.target.error);
+            rekect(event.target.error);
+        };
 
-    request.onupgradeneeded = (event) => {
-        let db = event.target.result;
-        if (!db.objectStoreNames.contains('sites')) {
-            db.createObjectStore('sites', { keyPath: 'hostname' });
-            console.log("Object store 'sites' created.");
-        }
-    };
-
-    request.onsuccess = (event) => {
-        getTabHostname((hostname) => {
+        request.onupgradeneeded = (event) => {
             let db = event.target.result;
+            if (!db.objectStoreNames.contains('sites')) {
+                db.createObjectStore('sites', { keyPath: 'hostname' });
+                console.log("Object store 'sites' created.");
+            }
 
-            const request = db.transaction('sites')
-                    .objectStore('sites')
-                    .get(hostname);
+            resolve(false);
+        };
 
+        request.onsuccess = (event) => {
 
-            request.onsuccess = ()=> {
-                const site = request.result;
-        
-                if (site) {
-                    console.log('Got the specific site:', site);
-                } else {
-                    console.warn('No site found for this hostname in the database.');
+            let db = event.target.result;
+    
+                const request = db.transaction('sites')
+                        .objectStore('sites')
+                        .get(hostname);
+    
+    
+                request.onsuccess = ()=> {
+                    resolve(!!request.result);
                 }
-            }
+    
+                request.onerror = (err)=> {
+                    reject("Error retrieving site from database");
+                }
 
-            request.onerror = (err)=> {
-                console.error(`Error to get the specific site: ${err}`)
-            }
-        });
-    }
+        }
+    })
+
+
+
 }
 
-async function getTabHostname(callback) {
-    chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
-        var tab = tabs[0];
-        var url = new URL(tab.url)
-        callback(url.hostname)
-      })
+async function getTabHostname() {
+    return new Promise((resolve, reject) => {
+        chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+            if (chrome.runtime.lastError) {
+                return reject(chrome.runtime.lastError);
+            }
+            if (tabs.length === 0) {
+                return reject("No active tab found");
+            }
+            try {
+                const url = new URL(tabs[0].url);
+                resolve(url.hostname);
+            } catch (error) {
+                reject(error);
+            }
+        });
+    });
+}
+
+chrome.tabs.onActivated.addListener(handleVisibilityChange);
+
+
+async function handleVisibilityChange() {
+    console.log("handle visibility change triggered !");
+    try {
+        const hostname = await getTabHostname();
+        const siteExists = await testUrl(hostname);
+        if (siteExists) {
+            chrome.action.setBadgeText({ text: "1" });
+        } else {
+            chrome.action.setBadgeText({ text: "" });
+        }
+    } catch (error) {
+        console.error("Error during visibility change handling:", error);
+    }
 }
