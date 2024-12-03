@@ -1,7 +1,8 @@
 document.addEventListener("DOMContentLoaded", () => {
     const button1 = document.getElementById("store-url-button");
-    const button2 = document.getElementById("test-url-button");
-    const button3 = document.getElementById("clear-db-button");
+    const button2 = document.getElementById("show-url-button");
+    const button3 = document.getElementById("test-url-button");
+    const button4 = document.getElementById("clear-db-button");
 
     button1.addEventListener("click", () => {
         storeUrl();
@@ -12,6 +13,10 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     button3.addEventListener("click", () => {
+        testUrl();
+    });
+
+    button4.addEventListener("click", () => {
         window.indexedDB.databases().then((r) => {
             for (var i = 0; i < r.length; i++) window.indexedDB.deleteDatabase(r[i].name);
         }).then(() => {
@@ -63,7 +68,6 @@ function storeUrl() {
     };
 }
 
-
 function showUrl() {
     const request = indexedDB.open("db", 2);
 
@@ -98,6 +102,48 @@ function showUrl() {
     request.onerror = (err)=> {
         console.error(`Error to get all sites: ${err}`)
     }
+    }
+}
+
+
+function testUrl() {
+    const request = indexedDB.open("db", 2);
+
+    request.onerror = (event) => {
+        console.log("Error opening the database", event.target.error);
+    };
+
+    request.onupgradeneeded = (event) => {
+        let db = event.target.result;
+        if (!db.objectStoreNames.contains('sites')) {
+            db.createObjectStore('sites', { keyPath: 'hostname' });
+            console.log("Object store 'sites' created.");
+        }
+    };
+
+    request.onsuccess = (event) => {
+        getTabHostname((hostname) => {
+            let db = event.target.result;
+
+            const request = db.transaction('sites')
+                    .objectStore('sites')
+                    .get(hostname);
+
+
+            request.onsuccess = ()=> {
+                const site = request.result;
+        
+                if (site) {
+                    console.log('Got the specific site:', site);
+                } else {
+                    console.warn('No site found for this hostname in the database.');
+                }
+            }
+
+            request.onerror = (err)=> {
+                console.error(`Error to get the specific site: ${err}`)
+            }
+        });
     }
 }
 
