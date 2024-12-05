@@ -38,7 +38,7 @@ async function checkUrl(hostname) {
     });
 }
 
-function addUrl(hostname) {
+function addUrl(hostname, email, password) {
     return new Promise((resolve, reject) => {
 
         const request = indexedDB.open("db", 2);
@@ -63,8 +63,8 @@ function addUrl(hostname) {
 
             let site = {
                 hostname: hostname,
-                email: 'email',
-                password: 'password'
+                email: email,
+                password: password
             };
 
             let addRequest = sites.add(site);

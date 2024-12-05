@@ -5,9 +5,12 @@ document.addEventListener("DOMContentLoaded", () => {
     const button2 = document.getElementById("show-url-button");
     const button3 = document.getElementById("clear-db-button");
 
+    const email = document.getElementById("email");
+    const password = document.getElementById("password");
+
     button1.addEventListener("click", async () => {
         getTabHostname().then(currentHostname => {
-            addUrl(currentHostname)
+            addUrl(currentHostname, email.value, password.value)
                 .then(() => {
                     console.log(currentHostname, "successfully added to db");
                 })
