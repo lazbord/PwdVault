@@ -10,12 +10,12 @@ async function handleTabChange() {
 
         checkUrl(currentHostname).then(result => { //Check if the hostname is present in the db
             if (result) {
-                chrome.action.setBadgeText({ text: "1" }); //Show or not the badge (notifiaction)
+                chrome.action.setBadgeBackgroundColor({ color: 'red'}); //Show or not the badge (notification)
+                chrome.action.setBadgeTextColor({ color: 'white'});
+                chrome.action.setBadgeText({ text: "1" });
             } else {
                 chrome.action.setBadgeText({ text: "" });
             }
-        }).catch(() => {
-            chrome.action.setBadgeText({ text: "" });
         });
     });
 }
