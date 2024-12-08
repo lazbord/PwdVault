@@ -20,35 +20,43 @@
 // });
 
 
-const inputs = document.querySelectorAll("input");
+// const inputs = document.querySelectorAll("input");
 
-const keywords = ["e-mail", "mail", "user", "id","identifiant","nom","utilisateur","mot de passe","password","pwd"]; // Liste des mots-clés à chercher.
+// const keywords = ["e-mail", "mail", "user", "id","identifiant","nom","utilisateur","mot de passe","password","pwd"]; // Liste des mots-clés à chercher.
 
-inputs.forEach(input => {
-  input.addEventListener("click", () => {
-    console.log("Clic sur un input !");
-    // Vérifie si un élément proche contient un mot-clé défini.
-    let shouldLog = false;
+// inputs.forEach(input => {
+//   input.addEventListener("click", () => {
+//     console.log("Clic sur un input !");
+//     let shouldLog = false;
 
-    // Vérifie si un label associé contient un mot-clé.
-    const label = document.querySelector(`label[for="${input.id}"]`);
-    if (label) {
-      shouldLog = keywords.some(keyword => label.textContent.toLowerCase().includes(keyword));
-    }
+//     const label = document.querySelector(`label[for="${input.id}"]`);
+//     if (label) {
+//       shouldLog = keywords.some(keyword => label.textContent.toLowerCase().includes(keyword));
+//     }
 
-    // Si aucun label trouvé ou correspondant, cherche des mots-clés dans les parents proches.
-    if (!shouldLog) {
-      let parent = input.parentElement;
-      while (parent && !shouldLog) {
-        shouldLog = keywords.some(keyword => parent.textContent.toLowerCase().includes(keyword));
-        parent = parent.parentElement; // Continue à monter dans la hiérarchie.
-      }
-    }
+//     if (!shouldLog) {
+//       let parent = input.parentElement;
+//       while (parent && !shouldLog) {
+//         shouldLog = keywords.some(keyword => parent.textContent.toLowerCase().includes(keyword));
+//         parent = parent.parentElement; // Continue à monter dans la hiérarchie.
+//       }
+//     }
 
-    // Si un mot-clé a été trouvé, on log l'input.
-    if (shouldLog) {
-      console.log("Un mot-clé a été trouvé à proximité !");
-      console.log(input);
-    }
-  });
+//     if (shouldLog) {
+//       console.log("Un mot-clé a été trouvé à proximité !");
+//       console.log(input);
+//     }
+//   });
+// });
+
+
+document.querySelector('form').addEventListener('submit', (event) => {
+  event.preventDefault(); // Prevent the form from submitting
+  const formData = new FormData(event.target); // Capture form data
+  for (const [key, value] of formData.entries()) {
+      console.log(`${key}: ${value}`); // Log each form field and its value
+  }
+  debugger;
+  // Optionally: re-submit the form if needed
+  event.target.submit();
 });

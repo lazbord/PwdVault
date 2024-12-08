@@ -2,3 +2,23 @@ body {
     width: 300px;
     height: 200px;
 }
+
+#vault {
+    border-color: black;
+    border-style: solid;
+    border-width: 1px;
+    height: auto;
+    min-height: 8vh;
+    background-color: lightgrey;
+}
+
+.site {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.site p {
+    margin-right: 17%;
+    margin-left: 5%;
+}
