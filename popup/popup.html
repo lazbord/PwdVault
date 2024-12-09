@@ -1,17 +1,41 @@
 <html>
   <body>
+    
     <h1>Password Manager</h1>
-    <p >Ceci est un super test</p> 
-    <button id="store-url-button">Store URL</button>
-    <button id="show-url-button">Show URL</button>
-    <button id="get-usr&pwd-button">Get Usr&Pwd URL</button>
-    <button id="clear-db-button">Clear DB</button>
-    <input id="email">E-mail</input>
-    <input id="password">Password</input>
-    <p>Logins</p>
-    <div id="vault">
+
+    <div class="content"></div>
+
+    <div class="menu">
+      <button id="tab-button">Tab</button>
+      <button id="vault-button">Vault</button>
+      <button id="parameters-button">Parameters</button>
     </div>
+
     <script type="module" src="popup.js"></script>
     <link rel="stylesheet" href="popup.css">
+
   </body>
 </html>
+
+
+<template id="tab">
+  <p >Ceci est un super test</p> 
+  <button id="store-url-button">Store URL</button>
+  <button id="show-url-button">Show URL</button>
+  <button id="get-usr&pwd-button">Get Usr&Pwd URL</button>
+  <button id="clear-db-button">Clear DB</button>
+  <input id="email">E-mail</input>
+  <input id="password">Password</input>
+  <p>Logins</p>
+  <div id="logins"></div>
+</template>
+
+<template id="vault">
+  <h1>Vault</h1>
+  <p>This is the vault content.</p>
+</template>
+
+<template id="parameters">
+  <h1>Parameters</h1>
+  <p>This is the parameters content.</p>
+</template>
