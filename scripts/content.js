@@ -50,13 +50,13 @@
 // });
 
 
-document.querySelector('form').addEventListener('submit', (event) => {
-  event.preventDefault(); // Prevent the form from submitting
-  const formData = new FormData(event.target); // Capture form data
-  for (const [key, value] of formData.entries()) {
-      console.log(`${key}: ${value}`); // Log each form field and its value
-  }
-  debugger;
-  // Optionally: re-submit the form if needed
-  event.target.submit();
-});
+// document.querySelector('form').addEventListener('submit', (event) => {
+//   event.preventDefault(); // Prevent the form from submitting
+//   const formData = new FormData(event.target); // Capture form data
+//   for (const [key, value] of formData.entries()) {
+//       console.log(`${key}: ${value}`); // Log each form field and its value
+//   }
+//   debugger;
+//   // Optionally: re-submit the form if needed
+//   event.target.submit();
+// });

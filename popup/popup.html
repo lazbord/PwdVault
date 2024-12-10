@@ -1,15 +1,13 @@
 <html>
   <body>
-    
-    <h1>Password Manager</h1>
 
     <div class="content"></div>
 
-    <div class="menu">
-      <button id="tab-button">Tab</button>
-      <button id="vault-button">Vault</button>
-      <button id="parameters-button">Parameters</button>
-    </div>
+      <div class="menu">
+        <button id="tab-button">Tab</button>
+        <button id="vault-button">Vault</button>
+        <button id="parameters-button">Parameters</button>
+      </div>
 
     <script type="module" src="popup.js"></script>
     <link rel="stylesheet" href="popup.css">
@@ -19,23 +17,27 @@
 
 
 <template id="tab">
-  <p >Ceci est un super test</p> 
-  <button id="store-url-button">Store URL</button>
-  <button id="show-url-button">Show URL</button>
-  <button id="get-usr&pwd-button">Get Usr&Pwd URL</button>
-  <button id="clear-db-button">Clear DB</button>
-  <input id="email">E-mail</input>
-  <input id="password">Password</input>
   <p>Logins</p>
   <div id="logins"></div>
 </template>
 
 <template id="vault">
-  <h1>Vault</h1>
-  <p>This is the vault content.</p>
+  <button id="store-url-button">Store URL</button>
+  <button id="show-url-button">Show URL</button>
+  <button id="get-usr&pwd-button">Get Usr&Pwd URL</button>
+  <button id="clear-db-button">Clear DB</button>
+  <button id="new-item-button">New Item</button>
+  <input id="email">E-mail</input>
+  <input id="password">Password</input>
 </template>
 
 <template id="parameters">
-  <h1>Parameters</h1>
   <p>This is the parameters content.</p>
+</template>
+
+<template id="item">
+  <div class="item-menu">
+    <button id="cancel-button">Cancel</button>
+    <button id="save-button">Save</button>
+  </div>
 </template>
