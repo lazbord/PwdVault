@@ -1,40 +1,12 @@
-import { addUrl, showDB, removeDB, getUrlData } from '../background/db.js';
+import { removeDB, getAllLogins } from '../background/db.js';
 import { initItem } from '../component/item.js';
 
 function initVault() {
-    const button1 = document.getElementById("store-url-button");
-    const button2 = document.getElementById("show-url-button");
-    const button3 = document.getElementById("clear-db-button");
-    const button4 = document.getElementById("get-usr&pwd-button");
-    const button5 = document.getElementById("new-item-button");
+    loadVaultLogins();
+    const clearDbButton = document.getElementById("clear-db-button");
+    const newItemButton = document.getElementById("new-item-button");
 
-    const email = document.getElementById("email");
-    const password = document.getElementById("password");
-
-    button1.addEventListener("click", async () => {
-        getTabHostname().then(currentHostname => {
-            addUrl(currentHostname, email.value, password.value)
-                .then(() => {
-                    console.log(currentHostname, "successfully added to db");
-                })
-                .catch(error => {
-                    console.log("Error adding site to db:", error);
-                });
-        }).catch(error => {
-            console.log("Error retrieving tab hostname:", error);
-        });
-    });
-
-    button2.addEventListener("click", () => {
-        showDB().then((sites) => {
-            console.table(sites)
-        })
-        .catch(error => {
-            console.log(error);
-        })
-    });
-
-    button3.addEventListener("click", () => {
+    clearDbButton.addEventListener("click", () => {
         removeDB().then(() => {
             alert("Database has been reset");
         })
@@ -43,36 +15,45 @@ function initVault() {
         })
     });
 
-    button4.addEventListener("click", () => {
-        getTabHostname().then(currentHostname => {
-            getUrlData(currentHostname)
-                .then((event) => {
-                    console.log(event);
-                })
-                .catch(error => {
-                    console.log("Error fetching data from url:", error);
-                });
-        }).catch(error => {
-            console.log("Error retrieving tab hostname:", error);
-        });
-    });
-
-    button5.addEventListener("click", () => {
+    newItemButton.addEventListener("click", () => {
         initItem();
     });
 
 }
 
-async function getTabHostname() {
-    return new Promise((resolve, reject) => {
-        chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
-            try {
-                const url = new URL(tabs[0].url);
-                resolve(url.hostname);
-            } catch (error) {
-                reject(error);
+async function loadVaultLogins() {
+    getAllLogins()
+        .then((event) => {
+
+            let vault = document.getElementById("logins");
+                
+            if (event) {
+                event.forEach(element => {
+                let newDiv = document.createElement("div");
+                let button1 = document.createElement("button");
+                let button2 = document.createElement("button");
+                let name = document.createElement("p");
+                newDiv.className = 'site';
+    
+                name.innerText = element.hostname;
+                button1.innerHTML = element.email;
+                button2.innerHTML = element.password;
+    
+                newDiv.appendChild(name);
+                newDiv.appendChild(button1);
+                newDiv.appendChild(button2);
+    
+                vault.appendChild(newDiv);
+                });
             }
-        });
+            else {
+                let name = document.createElement("p");
+                name.innerText = "No logins saved for this site";
+                vault.appendChild(name);
+            }
+        })
+    .catch(error => {
+        console.log("Error fetching data from url:", error);
     });
 }
 

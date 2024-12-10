@@ -79,7 +79,7 @@ function addUrl(hostname, email, password) {
     });
 }
 
-async function showDB(){
+async function getAllLogins(){
     return new Promise((resolve, reject) => {
         const request = indexedDB.open("db", 2);
     
@@ -104,6 +104,7 @@ async function showDB(){
 
             request.onsuccess = ()=> {
                 const sites = request.result;
+                console.table(sites);
                 resolve(sites);
             }
 
@@ -126,7 +127,7 @@ function removeDB() {
 
 export {
     addUrl,
-    showDB,
+    getAllLogins,
     removeDB,
     getUrlData
 };

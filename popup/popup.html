@@ -22,13 +22,13 @@
 </template>
 
 <template id="vault">
-  <button id="store-url-button">Store URL</button>
-  <button id="show-url-button">Show URL</button>
-  <button id="get-usr&pwd-button">Get Usr&Pwd URL</button>
+  <p>All stored logins</p>
+  <div id="logins">
+
+  </div>
+
   <button id="clear-db-button">Clear DB</button>
   <button id="new-item-button">New Item</button>
-  <input id="email">E-mail</input>
-  <input id="password">Password</input>
 </template>
 
 <template id="parameters">
@@ -39,5 +39,10 @@
   <div class="item-menu">
     <button id="cancel-button">Cancel</button>
     <button id="save-button">Save</button>
+  </div>
+  <div class="item-content">
+    <input id="hostname">Website</input>
+    <input id="username">Username</input>
+    <input id="password">Password</input>
   </div>
 </template>
